@@ -4,6 +4,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('gitlab-credentials')
         VERSION = "1.0.0"
         CI_REGISTRY_IMAGE = "registry.gitlab.com/rubenalbi/node-todo-cicd"
+        CONTAINER_NAME = "node-todo-cicd"
         tag = "${env.BRANCH_NAME}" 
     }
 
@@ -35,10 +36,10 @@ pipeline {
                         credentialsId: 'homeserver-ssh', passwordVariable: 'userPassword', usernameVariable: 'userName')]) {
                         remote.user = userName
                         remote.password = userPassword
-                        sshCommand remote: remote, command: 'touch ' + env.CI_REGISTRY_IMAGE + '.txt'
-                        sshCommand remote: remote, command: 'docker stop ${env.CI_REGISTRY_IMAGE} || true'
-                        sshCommand remote: remote, command: 'docker rm ${env.CI_REGISTRY_IMAGE} || true'
-                        sshCommand remote: remote, command: 'docker run --name ${env.CI_REGISTRY_IMAGE} -d -p 8000:8000 ${env.CI_REGISTRY_IMAGE}:${env.VERSION}-${env.tag}'
+                        sshCommand remote: remote, command: 'docker stop ' + env.CONTAINER_NAME + ' || true'
+                        sshCommand remote: remote, command: 'docker rm ' + env.CONTAINER_NAME + ' || true'
+                        sshCommand remote: remote, command: 'docker image prune -f'
+                        sshCommand remote: remote, command: 'docker run --name ' + env.CONTAINER_NAME + ' -d -p 8000:8000 ' + env.CI_REGISTRY_IMAGE + ':' + env.VERSION + '-' + env.tag
                     }
                 }
             }
