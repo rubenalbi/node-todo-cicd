@@ -34,9 +34,9 @@ pipeline {
                         credentialsId: 'homeserver-ssh', passwordVariable: 'userPassword', usernameVariable: 'userName')]) {
                         remote.user = userName
                         remote.password = userPassword
-                        sshCommand remote: remote, command: 'docker stop $CI_REGISTRY_IMAGE || true'
-                        sshCommand remote: remote, command: 'docker rm $CI_REGISTRY_IMAGE || true'
-                        sshCommand remote: remote, command: 'docker run --name $CI_REGISTRY_IMAGE -d -p 8000:8000 $CI_REGISTRY_IMAGE:$VERSION-$tag'
+                        sshCommand remote: remote, command: 'docker stop ${env.CI_REGISTRY_IMAGE} || true'
+                        sshCommand remote: remote, command: 'docker rm ${env.CI_REGISTRY_IMAGE} || true'
+                        sshCommand remote: remote, command: 'docker run --name ${env.CI_REGISTRY_IMAGE} -d -p 8000:8000 ${env.CI_REGISTRY_IMAGE}:${env.VERSION}-${env.tag}'
                     }
                 }
             }
