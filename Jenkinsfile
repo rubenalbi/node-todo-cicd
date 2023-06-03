@@ -54,7 +54,6 @@ pipeline {
             steps {
                 sh 'npm --version'
                 sh 'npm install'
-                VERSION = readJSON(file: 'package.json').version
             }
         }
         stage('Build and Test'){
