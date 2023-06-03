@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('gitlab-credentials')
-        VERSION = "1.0.0"
+        VERSION = "0.0.1"
         CI_REGISTRY_IMAGE = "registry.gitlab.com/rubenalbi/node-todo-cicd"
         CONTAINER_NAME = "node-todo-cicd"
         tag = "${env.BRANCH_NAME}"
@@ -54,12 +54,14 @@ pipeline {
             steps {
                 sh 'npm --version'
                 sh 'npm install'
-                ver = sh "npm -version"
+                script {
+                    VERSION = sh "npm pkg get version"
+                }
             }
         }
         stage('Build and Test'){
             steps {
-                echo "${ver}"
+                echo "${VERSION}"
                 echo "${params.PARAMETER_01}"
                 sh 'docker build --pull -t $CI_REGISTRY_IMAGE:$VERSION-$tag .'
             }
