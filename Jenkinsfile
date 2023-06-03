@@ -55,7 +55,7 @@ pipeline {
                 sh 'npm run test'
                 sh 'apk update && apk add jq'
                 script {
-                    env.VERSION = sh(script: 'jq -r \".version\" < ./package.json | xargs', returnStdout: true)
+                    env.VERSION = sh(script: 'jq -r \".version\" < ./package.json', returnStdout: true).trim()
                 }
             }
         }
