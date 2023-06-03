@@ -55,13 +55,12 @@ pipeline {
                 sh 'npm run test'
                 sh 'apk update && apk add jq'
                 script {
-                    env.VERSION = sh(script: 'jq -r \".version\" < ./package.json', returnStdout: true)
+                    env.VERSION = sh(script: 'jq -r \".version\" < ./package.json | xargs', returnStdout: true)
                 }
             }
         }
         stage('Build'){
             steps {
-                echo "${VERSION}"
                 echo "${params.PARAMETER_01}"
                 sh 'docker build --pull -t $CI_REGISTRY_IMAGE:$VERSION-$tag .'
             }
@@ -69,8 +68,6 @@ pipeline {
         stage('Push Image'){
             steps {
                 echo 'logging in to docker hub and pushing image..'
-                echo "${VERSION}"
-                echo "${env.VERSION}"
                 withCredentials([usernamePassword(credentialsId:'gitlab-credentials',passwordVariable:'dockerHubPassword', usernameVariable:'dockerHubUser')]) {
                     sh "docker login registry.gitlab.com -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
                     sh 'docker push $CI_REGISTRY_IMAGE:$VERSION-$tag'
