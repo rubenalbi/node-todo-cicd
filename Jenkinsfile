@@ -25,6 +25,20 @@ pipeline {
         stage('Deploy'){
             steps {
                 echo 'Deploying application'
+                script {
+                    def remote = [:]
+                    remote.name = 'ruben'
+                    remote.host = 'homeserver.rubenalbiach.com'
+                    remote.allowAnyHosts = true
+                    withCredentials([usernamePassword(
+                        credentialsId: 'homeserver-ssh', passwordVariable: 'userPassword', usernameVariable: 'userName')]) {
+                        remote.user = userName
+                        remote.password = userPassword
+                        sshCommand remote: remote, command: 'docker stop $CI_REGISTRY_IMAGE || true'
+                        sshCommand remote: remote, command: 'docker rm $CI_REGISTRY_IMAGE || true'
+                        sshCommand remote: remote, command: 'docker run --name $CI_REGISTRY_IMAGE -d -p 8000:8000 $CI_REGISTRY_IMAGE:$VERSION-$tag'
+                    }
+                }
             }
         }
     }
