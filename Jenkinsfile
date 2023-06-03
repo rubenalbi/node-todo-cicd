@@ -42,6 +42,7 @@ pipeline {
                         sshCommand remote: remote, command: 'docker image prune -f'
                         withCredentials([usernamePassword(credentialsId:'gitlab-credentials',passwordVariable:'dockerHubPassword', usernameVariable:'dockerHubUser')]) {
                             sshCommand remote: remote, command: 'docker login registry.gitlab.com -u ' + env.dockerHubUser + ' -p ' + env.dockerHubPassword
+                            sshCommand remote: remote, command: 'docker pull ' + env.CI_REGISTRY_IMAGE + ':' + env.VERSION + '-' + env.tag
                             sshCommand remote: remote, command: 'docker run --name ' + env.CONTAINER_NAME + ' -d -p ' + env.DEPLOYMENT_PORT + ' ' + env.CI_REGISTRY_IMAGE + ':' + env.VERSION + '-' + env.tag
                             sshCommand remote: remote, command: 'docker logout registry.gitlab.com'
                         }
