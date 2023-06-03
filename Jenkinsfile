@@ -69,6 +69,8 @@ pipeline {
         stage('Push Image'){
             steps {
                 echo 'logging in to docker hub and pushing image..'
+                echo "${VERSION}"
+                echo "${env.VERSION}"
                 withCredentials([usernamePassword(credentialsId:'gitlab-credentials',passwordVariable:'dockerHubPassword', usernameVariable:'dockerHubUser')]) {
                     sh "docker login registry.gitlab.com -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
                     sh 'docker push $CI_REGISTRY_IMAGE:$VERSION-$tag'
