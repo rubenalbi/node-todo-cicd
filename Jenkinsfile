@@ -40,7 +40,7 @@ pipeline {
                 }
             }
         }
-        stage('Test and Version'){
+        stage('Test'){
             agent {
                 docker {
                     image 'node:18.16.0-alpine'
@@ -52,13 +52,13 @@ pipeline {
             }
             steps {
                 sh 'npm --version'
-                sh 'npm install'
+                sh 'npm run test'
                 script {
-                    env.VERSION = sh(script: 'npm pkg get version', returnStdout: true)
+                    env.VERSION = sh(script: 'npm run version', returnStdout: true)
                 }
             }
         }
-        stage('Build and Test'){
+        stage('Build'){
             steps {
                 echo "${VERSION}"
                 echo "${params.PARAMETER_01}"

@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha --recursive --exit"
+    "test": "mocha --recursive --exit",
+    "version": "node -p \"require('./package').version\""
   },
   "author": "riaan@entersekt.com",
   "description": "Basic to do list exercise",
