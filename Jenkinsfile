@@ -54,10 +54,12 @@ pipeline {
             steps {
                 sh 'npm --version'
                 sh 'npm install'
+                ver = sh "npm -version"
             }
         }
         stage('Build and Test'){
             steps {
+                echo "${ver}"
                 echo "${params.PARAMETER_01}"
                 sh 'docker build --pull -t $CI_REGISTRY_IMAGE:$VERSION-$tag .'
             }
