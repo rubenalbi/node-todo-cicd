@@ -42,8 +42,8 @@ pipeline {
             }
         }
         stage('Build and Test'){
-            echo "$params.PARAMETER_01"
             steps {
+                echo "${params.PARAMETER_01}"
                 sh 'docker build --pull -t $CI_REGISTRY_IMAGE:$VERSION-$tag .'
             }
         }
