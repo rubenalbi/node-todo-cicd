@@ -41,6 +41,22 @@ pipeline {
                 }
             }
         }
+        stage('Test and Version'){
+            agent {
+                docker {
+                    image 'node:18.16.0-alpine'
+                    // Run the container on the node specified at the
+                    // top-level of the Pipeline, in the same workspace,
+                    // rather than on a new node entirely:
+                    reuseNode true
+                }
+            }
+            steps {
+                sh 'npm --version'
+                sh 'npm install'
+                env.VERSION = readJSON(file: 'package.json').version
+            }
+        }
         stage('Build and Test'){
             steps {
                 echo "${params.PARAMETER_01}"
