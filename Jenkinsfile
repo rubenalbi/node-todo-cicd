@@ -2,7 +2,6 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('gitlab-credentials')
-        VERSION = "0.0.1"
         CI_REGISTRY_IMAGE = "registry.gitlab.com/rubenalbi/node-todo-cicd"
         CONTAINER_NAME = "node-todo-cicd"
         tag = "${env.BRANCH_NAME}"
