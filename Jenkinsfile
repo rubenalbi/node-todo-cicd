@@ -55,7 +55,7 @@ pipeline {
                 sh 'npm --version'
                 sh 'npm install'
                 script {
-                    env.VERSION = sh "npm pkg get version"
+                    VERSION = $(npm pkg get version --workspaces=false | tr -d \")
                 }
             }
         }
