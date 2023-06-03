@@ -42,6 +42,7 @@ pipeline {
             }
         }
         stage('Build and Test'){
+            echo "$params.PARAMETER_01"
             steps {
                 sh 'docker build --pull -t $CI_REGISTRY_IMAGE:$VERSION-$tag .'
             }
@@ -60,6 +61,7 @@ pipeline {
                 echo 'Deploying application'
                 script {
                     echo env.CI_REGISTRY_IMAGE
+                    echo params.PARAMETER_01
                     def remote = [:]
                     remote.name = 'ruben'
                     remote.host = 'homeserver.rubenalbiach.com'
